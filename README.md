@@ -1,41 +1,43 @@
 # Lightweight Embedded Speech Synthesizer
-Lightweight Embedded Speech Synthesizer (LESS) is a relatively simple retro-sounding speech synthesizer written in C11.
-It's inspired by retro speech synthesizers from the 1980s-1990s, in the likes of the Software Automatic Mouth and the
-STSPEECH.TOS program for the Atari 520ST.
+Lightweight Embedded Speech Synthesizer (LESS) is retro-sounding speech synthesizer inspired by
+technology of the 1980s-1990s. It's designed to be used everywhere from microcontrollers all the way
+up to desktop PCs.
 
-LESS is designed to be easily portable, lightweight and straightforward to understand. In that regard, the API will be designed
-such that you just provide LESS with a list of phonemes to pronounce and it will return a raw audio buffer. However, 
-I aim to eventually provide a text-to-phoneme converter so that you can just pronounce a text buffer, and also possibly a
-VST plugin that uses LESS as its backend.
+The voice is male-sounding, extremely crunchy and overall very retro (so don't come
+expecting Google WaveNet on your microcontroller!) Current plan is to just implement phoneme-to-speech, 
+eventually may include full text-to-speech. Also possibly will make a VST plugin.
+
+**Project status:** Unfortunately, I am extremely busy with other projects, and don't have that much time
+to work on this. So, it'll be done soon(TM)
 
 ## Background (some personal info)
-I initially wanted to make a speech synthesizer as far back as 2017, after learning about the awesome Chipspeech plugin
-from Plogue and the SpeakJet device from MagnaVox. Unfortunately, Chipspeech is closed source and the SpeakJet's documentation
-about its internal workings are essentially non-existent. Upon hearing the STSPEECH program for the Atari ST, I decided that
-I was going to try to build a similar sounding synthesizer to that.
+I became interested in retro-sounding speech synthesis after purchasing a SpeakJet from SparkFun. It's
+basically a speech synthesizer programmed onto a dsPIC, and it has a lovely retro sound that I found
+very appealing. Unfortunately, this chip is overpriced and not produced anymore (afaik). To make
+matters worse, because I am incredibly dumb, I accidentally fried it by reversing the polarity.
 
-Resources around the program are extremely difficult to find (see RESOURCES.md for some info), however I was eventually
-able to obtain a copy of it, along with some possibly related assembly source code, along with a Windows emulator for the
-program. Not knowing much 68000 assembly, I decided to do some basic reverse engineering of the emulator and discovered
-it was actually created by Stefan Stenzel of Waldorf Music. Upon doing some more research, it turns out that out one point
-in time Stefan actually had a copy of the original C source code to the program, but after contacting him on Twitter, he
-was unable to open source it due to agreements.
+Anyway, after I cooked my SpeakJet, I looked into software retro speech synthesizers, quickly
+coming across the Chipspeech plugin and all the sounds featured in there. I thought it might be cool to attempt
+to make my own. As an embedded systems developer, the concept of a speech synthesizer you can 
 
-So, with my reverse engineering skills being terrible, I decided it was a good time to try and implement my own
-formant speech synthesizer. Unfortunately, this is far from an easy task and hence why this will take so long to create.
+Unfortunately, Chipspeech is closed source and the SpeakJet's documentation
+about its internal workings are essentially non-existent. Upon hearing the STSPEECH program for the 
+Atari ST (in Chipspeech, it's called "Rotten ST"), I decided that I was going to try to build a similar 
+sounding synthesizer to that, from scratch.
 
-## Design
-**TODO early stages**
+## Building and running
+LESS comes in two parts: a Linux test-bench, and the actual library code you can copy into your
+own project.
 
-Based on: https://www.soundonsound.com/techniques/formant-synthesis and this masters thesis: https://archive.org/details/HEROTALK/mode/2up
+**To embed LESS in your own project,** (TODO)
 
-For vowels:
+**To run the test-bench,** use the CMakeLists.txt and compile and run main.c. The testbench requires
+(TODO dependencies, probably libsndfile and/or portaudio; and libogg)
 
-Square wave -> Parallel band pass filters -> Mixer -> Amplify/Distort -> Output
+### Embedded systems notes
+- I won't make many assumptions about your system. Ideally this should be compatible with any RTOS,
+but I will only test FreeRTOS.
+- You can replace your malloc, free and calloc in less.h
 
-For consonants:
-
-Noise -> ADSR -> Output
-
-### Considerations/problems
-- Bandpass filters are obscenely complicated
+## Licence
+Mozilla Public Licence v2.0
